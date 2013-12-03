@@ -129,3 +129,5 @@ BOARD_SEPOLICY_UNION += \
 	system.te \
 	ueventd.te \
 	wpa.te
+
+BOARD_HARDWARE_CLASS := device/lge/iprj-common/cmhw/
