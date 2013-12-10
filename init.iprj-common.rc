@@ -55,7 +55,7 @@ on boot
     # PowerHAL perms
     chown system system /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
 
-on early-init
+on init
     # See storage config details at http://source.android.com/tech/storage/
 
     export EXTERNAL_STORAGE /storage/sdcard
@@ -67,10 +67,6 @@ on early-init
     chmod 0701 /mnt/media_rw
     mkdir /mnt/media_rw/sdcard 0775 system system
     mkdir /storage/sdcard 0000 system system
-
-on init
-# Backward compatibility
-    symlink /system/bin /bin
 
 on fs
     wait /dev/block/mmcblk0
@@ -278,4 +274,3 @@ service hdmid /system/bin/hdmid
 service fuse_sdcard /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/sdcard /storage/sdcard
     class late_start
     disabled
-
