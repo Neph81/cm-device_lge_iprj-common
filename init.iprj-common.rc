@@ -101,6 +101,9 @@ on post-fs
     # create dirs if not exist
     mkdir /data/lgdrm 0770 lgdrm lgdrm_acc
     mkdir /data/wmdrm 0770 lgdrm lgdrm_acc
+
+    #time_daemon storage
+    mkdir /data/time 0700 system system
 ## ANDY_END
 
 on post-fs-data
@@ -197,10 +200,9 @@ service thermald /system/bin/thermald
     disabled
 
 service time_daemon /system/bin/time_daemon
-    user system
-    group system qcom_oncrpc
-    oneshot
-    disabled
+    user root
+    group root qcom_oncrpc
+    class late_start
 
 #on property:dev.bootcomplete=1
 #    mkdir /data/time/ 0700
