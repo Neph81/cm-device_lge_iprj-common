@@ -7,9 +7,11 @@
 /dev/urandom              0666   root       root
 /dev/ashmem               0666   root       root
 /dev/binder               0666   root       root
+# Make HW RNG readable by group system to let EntropyMixer read it.
+/dev/hw_random            0440   root       system
 
 # logger should be world writable (for logging) but not readable
-/dev/log/*                0662   root       log
+/dev/log/*                0666   root       log
 
 # the msm hw3d client device node is world writable/readable.
 /dev/msm_hw3dc            0666   root       root
@@ -29,7 +31,7 @@
 /dev/android_adb_enable   0660   adb        adb
 /dev/ttyMSM0              0600   bluetooth  bluetooth
 /dev/ttyHS0               0600   bluetooth  bluetooth
-/dev/uinput               0660   system     bluetooth
+/dev/uinput               0660   system     net_bt_stack
 /dev/alarm                0664   system     radio
 /dev/tty0                 0660   root       system
 /dev/sdio_tty_ciq_00      0660   system     system
@@ -181,7 +183,7 @@
 
 /dev/rfkill               0660   wifi       wifi
 
-/dev/ion                  0664   system     system
+/dev/ion                  0666   system     system
 /dev/pn544                0600   nfc        nfc
 
 /dev/rtc0		  0660   system     system
