@@ -1,3 +1,22 @@
 # Grant GPU access to all processes started by Zygote.
 # They need that to render the standard UI.
-allow appdomain gpu_device:chr_file rw_file_perms;
+allow appdomain gpu_device:chr_file { rw_file_perms execute };
+
+# Dalvik Compiler JIT Mapping.
+allow appdomain self:process execmem;
+allow appdomain ashmem_device:chr_file execute;
+
+# Read /data/data/com.android.providers.telephony files passed over Binder.
+allow appdomain radio_data_file:file { read getattr };
+
+# Allow apps to use the USB Accessory interface.
+# http://developer.android.com/guide/topics/connectivity/usb/accessory.html
+#
+# USB devices are first opened by the system server (USBDeviceManagerService)
+# and the file descriptor is passed to the right Activity via binder.
+allow appdomain usb_device:chr_file { read write getattr ioctl };
+allow appdomain usbaccessory_device:chr_file { read write getattr };
+
+# For legacy unlabeled userdata on existing devices.
+# See discussion of Unlabeled files in domain.te for more information.
+allow appdomain unlabeled:file x_file_perms;

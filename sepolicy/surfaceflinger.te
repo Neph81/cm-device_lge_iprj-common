@@ -7,3 +7,23 @@ allow surfaceflinger sysfs:file rw_file_perms;
 allow surfaceflinger shell_data_file:dir search;
 allow surfaceflinger shell_data_file:file { open getattr read };
 allow surfaceflinger shell_data_file:lnk_file read;
+
+# Access /dev/graphics/fb0.
+allow surfaceflinger graphics_device:dir search;
+allow surfaceflinger graphics_device:chr_file rw_file_perms;
+
+# Access /dev/video1.
+allow surfaceflinger video_device:dir r_dir_perms;
+allow surfaceflinger video_device:chr_file rw_file_perms;
+
+# Set properties.
+allow surfaceflinger system_prop:property_service set;
+
+# Use open files supplied by an app.
+allow surfaceflinger appdomain:fd use;
+allow surfaceflinger app_data_file:file { read write };
+
+# Needed on some devices for playing DRM protected content,
+# but seems expected and appropriate for all devices.
+allow surfaceflinger tee:unix_stream_socket connectto;
+allow surfaceflinger tee_device:chr_file rw_file_perms;

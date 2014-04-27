@@ -1,5 +1,5 @@
 # Grant access to Qualcomm MSM Audio ACDB device to mediaserver
-allow mediaserver { gpu_device msm_acdb_device }:chr_file rw_file_perms;
+allow mediaserver { gpu_device graphics_device msm_acdb_device }:chr_file rw_file_perms;
 
 # Grant access to Qualcomm MSM Interface (QMI) audio sockets to mediaserver
 allow mediaserver qmux_audio_socket:sock_file create_file_perms;
@@ -11,3 +11,62 @@ allow mediaserver self:socket create;
 # Grant access to audio firmware files to mediaserver
 allow mediaserver audio_firmware_file:dir ra_dir_perms;
 allow mediaserver audio_firmware_file:file create_file_perms;
+
+typeattribute mediaserver mlstrustedsubject;
+unix_socket_connect(mediaserver, property, init)
+
+r_dir_file(mediaserver, sdcard_type)
+
+binder_use(mediaserver)
+binder_call(mediaserver, binderservicedomain)
+binder_call(mediaserver, appdomain)
+binder_service(mediaserver)
+
+allow mediaserver self:process execmem;
+allow mediaserver kernel:system module_request;
+allow mediaserver app_data_file:dir search;
+allow mediaserver app_data_file:file rw_file_perms;
+allow mediaserver sdcard_type:file write;
+allow mediaserver video_device:dir r_dir_perms;
+allow mediaserver video_device:chr_file rw_file_perms;
+allow mediaserver audio_device:dir r_dir_perms;
+allow mediaserver tee_device:chr_file rw_file_perms;
+allow mediaserver audio_prop:property_service set;
+
+# Access audio devices at all.
+allow mediaserver audio_device:chr_file rw_file_perms;
+
+# XXX Label with a specific type?
+allow mediaserver sysfs:file rw_file_perms;
+
+# Read resources from open apk files passed over Binder.
+allow mediaserver apk_data_file:file { read getattr };
+allow mediaserver asec_apk_file:file { read getattr };
+
+# Read /data/data/com.android.providers.telephony files passed over Binder.
+allow mediaserver radio_data_file:file { read getattr };
+
+# Access camera device.
+allow mediaserver camera_device:chr_file rw_file_perms;
+allow mediaserver rpmsg_device:chr_file rw_file_perms;
+
+# Camera data
+r_dir_file(mediaserver, camera_data_file)
+
+# Grant access to audio files to mediaserver
+allow mediaserver audio_data_file:dir ra_dir_perms;
+allow mediaserver audio_data_file:file create_file_perms;
+
+# Read/[write] to /proc/net/xt_qtaguid/ctrl and /dev/xt_qtaguid
+allow mediaserver qtaguid_proc:file rw_file_perms;
+allow mediaserver qtaguid_device:chr_file r_file_perms;
+
+# Allow abstract socket connection
+allow mediaserver rild:unix_stream_socket { connectto read write setopt };
+
+# Needed on some devices for playing audio on paired BT device,
+# but seems appropriate for all devices.
+unix_socket_connect(mediaserver, bluetooth, bluetooth)
+
+# Connect to tee service.
+allow mediaserver tee:unix_stream_socket connectto;
