@@ -6,7 +6,6 @@ type qmux_radio_socket, file_type;
 
 type proc_net, fs_type;
 type proc_sysrq, fs_type;
-type sysfs_wake_lock, fs_type, sysfs_type;
 # /sys/module/lowmemorykiller
 type sysfs_lowmemorykiller, fs_type, sysfs_type;
 
